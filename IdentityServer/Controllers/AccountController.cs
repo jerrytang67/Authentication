@@ -84,12 +84,11 @@ namespace IdentityServer.Controllers
 
     public class LoginViewModel
     {
-        [Required]
-        public string Username { get; set; }
+        [Required] public string Username { get; set; } = "bob";
 
         [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
+        // [DataType(DataType.Password)]
+        public string Password { get; set; } = "password";
 
 
         public string ReturnUrl { get; set; }
