@@ -49,7 +49,9 @@ namespace IdentityServer
 
                 // puts all the claims in the id_token
                 AlwaysIncludeUserClaimsInIdToken = true,
-                RequireConsent = false
+                RequireConsent = false,
+
+                AllowOfflineAccess =  true
             }
         };
     }

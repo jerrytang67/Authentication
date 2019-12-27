@@ -49,6 +49,8 @@ namespace MvcClient
                     // configure scope
                     config.Scope.Add("rc.scope");
                     config.Scope.Add("ApiOne");
+
+                    config.Scope.Add(("offline_access"));
                 });
 
             services.AddHttpClient();
