@@ -19,7 +19,7 @@ namespace MvcClient.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public HomeController(ILogger<HomeController> logger , IHttpClientFactory httpClientFactory)
+        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory;
@@ -42,7 +42,7 @@ namespace MvcClient.Controllers
             var claims = User.Claims;
 
             var result = await GetSecret(accessToken);
-            
+
             return View();
         }
 
@@ -55,9 +55,37 @@ namespace MvcClient.Controllers
 
             var response = await apiClient.GetAsync("https://localhost:44356/secret");
 
-            var content = await response.Content.ReadAsStringAsync();
+            var result = await response.Content.ReadAsStringAsync();
 
-            return content;
+            await RefreshAccessToken();
+
+            return result;
+        }
+
+
+        public async Task RefreshAccessToken()
+        {
+            var serverClient = _httpClientFactory.CreateClient();
+            var discoveryDocument = await serverClient.GetDiscoveryDocumentAsync("https://localhost:44343/");
+
+            var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
+            var refreshTokenClient = _httpClientFactory.CreateClient();
+
+            var tokenResponse = await refreshTokenClient.RequestRefreshTokenAsync(new RefreshTokenRequest()
+            {
+                Address = discoveryDocument.TokenEndpoint,
+                RefreshToken = refreshToken,
+                ClientId = "client_id_mvc",
+                ClientSecret = "client_secret_mvc"
+            });
+
+            var authInfo = await HttpContext.AuthenticateAsync("Cookie");  // Cookie 在MVCCLient 的startup中注册
+
+            authInfo.Properties.UpdateTokenValue("access_token", tokenResponse.AccessToken);
+            authInfo.Properties.UpdateTokenValue("id_token", tokenResponse.IdentityToken);
+            authInfo.Properties.UpdateTokenValue("refresh_token", tokenResponse.RefreshToken);
+
+            await HttpContext.SignInAsync("Cookie", authInfo.Principal, authInfo.Properties);
         }
 
 
@@ -66,7 +94,7 @@ namespace MvcClient.Controllers
             NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
