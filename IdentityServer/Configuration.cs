@@ -11,10 +11,17 @@ namespace IdentityServer
             new IdentityResources.OpenId(),
             new IdentityResources.Phone(),
             new IdentityResources.Email(),
-            new IdentityResources.Profile()
+            new IdentityResources.Profile(),
+            new IdentityResource {Name = "rc.scope", UserClaims = {"rc.garndma"}},
+            new IdentityResource {Name = "rc.api.scope", UserClaims = {"rc.api.garndma"}},
+
         };
 
-        public static IEnumerable<ApiResource> GetApis() => new List<ApiResource> {new ApiResource("ApiOne"), new ApiResource("ApiTwo")};
+        public static IEnumerable<ApiResource> GetApis() => new List<ApiResource>
+        {
+            new ApiResource("ApiOne", new[] {"rc.api.garndma"}),
+            new ApiResource("ApiTwo")
+        };
 
         public static IEnumerable<Client> GetClients() => new List<Client>
         {
@@ -36,8 +43,12 @@ namespace IdentityServer
                     "ApiOne",
                     "ApiTwo",
                     "openid",
-                    "profile"
+                    "profile",
+                    "rc.scope"
                 },
+
+                // puts all the claims in the id_token
+                AlwaysIncludeUserClaimsInIdToken = true,
                 RequireConsent = false
             }
         };

@@ -23,7 +23,6 @@ namespace ApiOne
 
                     config.Audience = "ApiOne";
                     
-
                 });
             
             services.AddControllers();

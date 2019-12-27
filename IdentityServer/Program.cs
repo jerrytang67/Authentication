@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +24,10 @@ namespace IdentityServer
 
                 var user = new IdentityUser("bob");
                 userManage.CreateAsync(user, "password").GetAwaiter().GetResult();
+
+                userManage.AddClaimAsync(user, new Claim("rc.garndma", "big.cookie")).GetAwaiter().GetResult();
+
+                userManage.AddClaimAsync(user, new Claim("rc.api.garndma", "big.api.cookie")).GetAwaiter().GetResult();
             }
 
             host.Run();

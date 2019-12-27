@@ -8,6 +8,5 @@
 <h2>Auth Page</h2>
 @foreach (var u in User.Claims)
 {
-    @:[@u.Type] : @u.Value
-
+    @:<div class="alert alert-success">[@u.Type] : @u.Value</div>
 }

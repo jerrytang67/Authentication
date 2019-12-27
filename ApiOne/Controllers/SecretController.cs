@@ -9,6 +9,7 @@ namespace ApiOne.Controllers
         [Authorize]
         public string Index()
         {
+            var clains = User.Claims;
             return "secret message form ApiOne";
         }
     }
