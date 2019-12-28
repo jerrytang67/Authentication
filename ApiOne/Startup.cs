@@ -17,19 +17,20 @@ namespace ApiOne
         {
 
             services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", config =>
+                .AddJwtBearer("Bearer", jwtBearerOptions =>
                 {
-                    config.Authority = "https://localhost:44343";
+                    jwtBearerOptions.Authority = "https://localhost:44343";
 
-                    config.Audience = "ApiOne";
+                    jwtBearerOptions.Audience = "ApiOne";
+
 
                 });
 
             services.AddCors(config =>
             {
-                config.AddPolicy("AllowAll", p =>
+                config.AddPolicy("AllowAll", policyBuilder =>
                 {
-                    p
+                    policyBuilder
                         .AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
@@ -55,7 +56,7 @@ namespace ApiOne
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
+            app.UseEndpoints(endpointRouteBuilder => { endpointRouteBuilder.MapDefaultControllerRoute(); });
         }
     }
 }

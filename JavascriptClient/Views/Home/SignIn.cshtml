@@ -6,12 +6,8 @@
 
 @section Scripts
 {
-    <script src="~/js/oidc-client.min.js"></script>
     <script>
-        var userManager = new Oidc.UserManager();
-
-        userManager.signinCallback().then(res => {
-            console.log(res);
+        mgr.signinCallback().then(res => {
             window.location.href = "/home/index";
         })
     </script>
