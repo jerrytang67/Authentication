@@ -22,9 +22,21 @@ namespace ApiOne
                     config.Authority = "https://localhost:44343";
 
                     config.Audience = "ApiOne";
-                    
+
                 });
-            
+
+            services.AddCors(config =>
+            {
+                config.AddPolicy("AllowAll", p =>
+                {
+                    p
+                        .AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
+
             services.AddControllers();
         }
 
@@ -35,10 +47,12 @@ namespace ApiOne
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("AllowAll");
+
             app.UseRouting();
 
             app.UseAuthentication();
-            
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
