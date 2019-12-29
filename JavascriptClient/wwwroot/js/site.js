@@ -2,6 +2,7 @@
     authority: "https://localhost:44343/",
     client_id: "client_id_js",
     redirect_uri: "https://localhost:44314/home/signin",
+    post_logout_redirect_uri: "https://localhost:44314/home/index",
     response_type: "id_token token",
     scope: "openid ApiOne ApiTwo rc.scope",
     userStore: new Oidc.WebStorageStateStore({ store: window.localStorage })
