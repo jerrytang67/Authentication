@@ -7,3 +7,21 @@ dotnet ef migrations add InitialIdentityServerConfigurationDbMigration -c Config
 dotnet ef database -c AppDbContext  update
 dotnet ef database -c PersistedGrantDbContext  update
 dotnet ef database -c ConfigurationDbContext  update
+
+
+设置credential
+https://blogs.msdn.microsoft.com/kaevans/2016/08/12/using-powershell-with-certificates/
+
+#### 新建
+$cert = New-SelfSignedCertificate -Subject "CN=THISISCERTNAME" -CertStoreLocation cert:\CurrentUser\My -Provider "Microsoft Strong Cryptographic Provider"
+
+#### 操作证书
+$cert = Get-ChildItem -Path cert:\CurrentUser\My | ?{$_.Subject -eq "CN=THISISCERTNAME"}
+
+### 设置用户名密码
+$cred = Get-Credential
+
+### 生成
+Export-PfxCertificate -Cert $cert -Password $cred.Password -FilePath ".\certName.pfx"
+
+credential  test password

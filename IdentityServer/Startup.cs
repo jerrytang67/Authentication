@@ -1,4 +1,6 @@
+using System.IO;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using IdentityServer.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,10 +15,12 @@ namespace IdentityServer
     public class Startup
     {
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _env;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
+            _env = env;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -49,6 +53,10 @@ namespace IdentityServer
 
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
+            var filePath = Path.Combine(_env.ContentRootPath, "ids4.pfx");
+
+            var certificate = new X509Certificate2(filePath, "password");
+
 
             services.AddIdentityServer()
                 .AddAspNetIdentity<IdentityUser>()
@@ -62,10 +70,11 @@ namespace IdentityServer
                     options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
                         sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
+                .AddSigningCredential(certificate)
                 // .AddInMemoryApiResources(Configuration.GetApis())
                 // .AddInMemoryClients(Configuration.GetClients())
                 // .AddInMemoryIdentityResources(Configuration.GetIdentityResources())
-                .AddDeveloperSigningCredential()
+                //.AddDeveloperSigningCredential()
                 ;
 
             services.AddControllersWithViews();
