@@ -13,6 +13,10 @@ var signIn = function () {
     mgr.signinRedirect();
 };
 
+var signOut = function() {
+    mgr.signoutRedirect();
+};
+
 mgr.getUser().then(user => {
     if (user) {
         axios.defaults.headers.common["Authorization"] = `Bearer ${user.access_token}`;

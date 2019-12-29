@@ -38,6 +38,7 @@ namespace IdentityServer
                 ClientSecrets = {new Secret("client_secret_mvc".ToSha256())},
                 AllowedGrantTypes = GrantTypes.Code,
                 RedirectUris = {"https://localhost:44382/signin-oidc"},
+                PostLogoutRedirectUris = {"https://localhost:44382/home/index"},
                 AllowedScopes =
                 {
                     "ApiOne",
@@ -61,6 +62,7 @@ namespace IdentityServer
 
                 AllowedCorsOrigins = { "https://localhost:44314" },
                 RedirectUris = {"https://localhost:44314/home/signin"},
+                PostLogoutRedirectUris = {"https://localhost:44314/home/index"},
 
                 AllowedScopes =
                 {

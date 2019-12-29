@@ -46,6 +46,11 @@ namespace MvcClient.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            return SignOut("Cookie","oidc");
+        }
+
 
         public async Task<string> GetSecret(string accessToken)
         {
