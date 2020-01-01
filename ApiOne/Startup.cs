@@ -15,15 +15,11 @@ namespace ApiOne
     {
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", jwtBearerOptions =>
                 {
                     jwtBearerOptions.Authority = "https://localhost:44343";
-
                     jwtBearerOptions.Audience = "ApiOne";
-
-
                 });
 
             services.AddCors(config =>
@@ -36,8 +32,6 @@ namespace ApiOne
                         .AllowAnyMethod();
                 });
             });
-
-
             services.AddControllers();
         }
 
